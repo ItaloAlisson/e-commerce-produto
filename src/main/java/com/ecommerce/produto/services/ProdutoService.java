@@ -1,6 +1,7 @@
 package com.ecommerce.produto.services;
 
 import com.ecommerce.produto.dtos.ProdutoRecordDTO;
+import com.ecommerce.produto.exceptions.ResourceNotFoundException;
 import com.ecommerce.produto.mappers.ProdutoMapper;
 import com.ecommerce.produto.models.ProdutoModel;
 import com.ecommerce.produto.models.ProdutoModelElasticSearch;
@@ -40,5 +41,12 @@ public class ProdutoService {
 
     public Iterable<ProdutoModelElasticSearch> buscarProdutos() {
         return elasticSearchRepository.findAll();
+    }
+
+    public ProdutoModelElasticSearch buscarProdutoPorNome(String nome) {
+        return elasticSearchRepository.findByNome(nome)
+                .orElseThrow(()->
+                        new ResourceNotFoundException("Produto com o nome " + nome
+                                + " não foi encontrado."));
     }
 }
