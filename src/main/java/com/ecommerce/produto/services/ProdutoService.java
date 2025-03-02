@@ -8,10 +8,13 @@ import com.ecommerce.produto.models.ProdutoModelElasticSearch;
 import com.ecommerce.produto.repositories.ProdutoElasticSearchRepository;
 import com.ecommerce.produto.repositories.ProdutoRepository;
 import com.ecommerce.produto.validation.ProdutoValidator;
+import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneOffset;
+import java.util.UUID;
 
 @Service
 public class ProdutoService {
@@ -48,5 +51,14 @@ public class ProdutoService {
                 .orElseThrow(()->
                         new ResourceNotFoundException("Produto com o nome " + nome
                                 + " não foi encontrado."));
+    }
+
+    public ProdutoModel atualizarDadosProduto(UUID id, @Valid ProdutoRecordDTO produtoDTO) {
+        var produto = produtoRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
+                        + " não foi encontrado."));
+
+        BeanUtils.copyProperties(produtoDTO,produto,"id");
+        return produtoRepository.save(produto);
     }
 }

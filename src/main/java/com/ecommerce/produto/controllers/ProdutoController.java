@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.UUID;
+
 @RestController
 @RequestMapping(value = "/produtos")
 public class ProdutoController {
@@ -38,5 +40,13 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.OK)
                 .body(produtoService.buscarProdutoPorNome(nome));
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<ProdutoModel> atualizarDadosProduto(@PathVariable(value = "id") UUID id,
+                                                      @RequestBody @Valid ProdutoRecordDTO produtoDTO){
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(produtoService.atualizarDadosProduto(id,produtoDTO));
+    }
+
 
 }
