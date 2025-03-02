@@ -59,6 +59,9 @@ public class ProdutoService {
                         + " não foi encontrado."));
 
         BeanUtils.copyProperties(produtoDTO,produto,"id");
+        var produtoElastic = produtoMapper.produtoModelParaModelElasticSearch(produto);
+        produtoElastic.setDataRegistro(produto.getDataRegistro().toInstant(ZoneOffset.UTC));
+        elasticSearchRepository.save(produtoElastic);
         return produtoRepository.save(produto);
     }
 
@@ -68,6 +71,9 @@ public class ProdutoService {
                         + " não foi encontrado."));
 
         produto.setPreco(produtoprecoDTO.preco());
+        var produtoElastic = produtoMapper.produtoModelParaModelElasticSearch(produto);
+        produtoElastic.setDataRegistro(produto.getDataRegistro().toInstant(ZoneOffset.UTC));
+        elasticSearchRepository.save(produtoElastic);
         produtoRepository.save(produto);
     }
 
