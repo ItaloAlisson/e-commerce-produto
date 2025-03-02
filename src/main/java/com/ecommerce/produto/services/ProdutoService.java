@@ -1,18 +1,44 @@
 package com.ecommerce.produto.services;
 
-import com.ecommerce.produto.controllers.ProdutoController;
+import com.ecommerce.produto.dtos.ProdutoRecordDTO;
+import com.ecommerce.produto.mappers.ProdutoMapper;
+import com.ecommerce.produto.models.ProdutoModel;
+import com.ecommerce.produto.models.ProdutoModelElasticSearch;
 import com.ecommerce.produto.repositories.ProdutoElasticSearchRepository;
 import com.ecommerce.produto.repositories.ProdutoRepository;
+import com.ecommerce.produto.validation.ProdutoValidator;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.time.ZoneOffset;
 
 @Service
 public class ProdutoService {
 
-    private final ProdutoRepository produtoRepository;
+    private final   ProdutoRepository produtoRepository;
     private final ProdutoElasticSearchRepository elasticSearchRepository;
+    private final ProdutoValidator produtoValidator;
+    private final ProdutoMapper produtoMapper;
 
-    public ProdutoService(ProdutoRepository produtoRepository, ProdutoElasticSearchRepository elasticSearchRepository) {
+    public ProdutoService(ProdutoRepository produtoRepository, ProdutoElasticSearchRepository elasticSearchRepository, ProdutoValidator produtoValidator, ProdutoMapper produtoMapper) {
         this.produtoRepository = produtoRepository;
         this.elasticSearchRepository = elasticSearchRepository;
+        this.produtoValidator = produtoValidator;
+        this.produtoMapper = produtoMapper;
+    }
+
+
+    public ProdutoModel registrarProduto(ProdutoRecordDTO produtoDTO) {
+        produtoValidator.existePorNome(produtoDTO.nome());
+        var novoProduto = produtoMapper.produtoDTOParaProdutoModel(produtoDTO);
+        novoProduto = produtoRepository.save(novoProduto);
+        var novoProdutoElastic = produtoMapper.produtoModelParaModelElasticSearch(novoProduto);
+        novoProdutoElastic.setDataRegistro(novoProduto.getDataRegistro().toInstant(ZoneOffset.UTC));
+        elasticSearchRepository.save(novoProdutoElastic);
+        return novoProduto;
+    }
+
+    public Iterable<ProdutoModelElasticSearch> buscarProdutos() {
+        return elasticSearchRepository.findAll();
     }
 }
