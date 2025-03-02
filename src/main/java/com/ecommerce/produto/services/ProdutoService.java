@@ -11,7 +11,6 @@ import com.ecommerce.produto.repositories.ProdutoRepository;
 import com.ecommerce.produto.validation.ProdutoValidator;
 import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneOffset;
@@ -70,5 +69,15 @@ public class ProdutoService {
 
         produto.setPreco(produtoprecoDTO.preco());
         produtoRepository.save(produto);
+    }
+
+    public void deletarProduto(UUID id) {
+        var produto = produtoRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
+                        + " não foi encontrado."));
+
+        var produtoElastic = produtoMapper.produtoModelParaModelElasticSearch(produto);
+        elasticSearchRepository.delete(produtoElastic);
+        produtoRepository.delete(produto);
     }
 }

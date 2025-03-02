@@ -56,4 +56,9 @@ public class ProdutoController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletarProduto(@PathVariable(value = "id") UUID id) {
+        produtoService.deletarProduto(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
