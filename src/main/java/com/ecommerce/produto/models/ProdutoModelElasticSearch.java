@@ -6,16 +6,17 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
 @Document(indexName = "produtos")
 public class ProdutoModelElasticSearch {
 
@@ -34,6 +35,8 @@ public class ProdutoModelElasticSearch {
     private CategoriaEnum categoria;
     @Field(type = FieldType.Text)
     private String descricao;
+    @Field(type = FieldType.Date)
+    private Instant dataRegistro;
 
 
 }
