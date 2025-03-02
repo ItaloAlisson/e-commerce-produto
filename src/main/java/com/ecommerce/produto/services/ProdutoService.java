@@ -1,5 +1,6 @@
 package com.ecommerce.produto.services;
 
+import com.ecommerce.produto.dtos.PrecoRecordDTO;
 import com.ecommerce.produto.dtos.ProdutoRecordDTO;
 import com.ecommerce.produto.exceptions.ResourceNotFoundException;
 import com.ecommerce.produto.mappers.ProdutoMapper;
@@ -53,12 +54,21 @@ public class ProdutoService {
                                 + " não foi encontrado."));
     }
 
-    public ProdutoModel atualizarDadosProduto(UUID id, @Valid ProdutoRecordDTO produtoDTO) {
+    public ProdutoModel atualizarDadosProduto(UUID id,ProdutoRecordDTO produtoDTO) {
         var produto = produtoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
                         + " não foi encontrado."));
 
         BeanUtils.copyProperties(produtoDTO,produto,"id");
         return produtoRepository.save(produto);
+    }
+
+    public void atualizarPrecoProduto(UUID id, @Valid PrecoRecordDTO produtoprecoDTO) {
+        var produto = produtoRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
+                        + " não foi encontrado."));
+
+        produto.setPreco(produtoprecoDTO.preco());
+        produtoRepository.save(produto);
     }
 }

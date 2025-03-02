@@ -1,5 +1,6 @@
 package com.ecommerce.produto.controllers;
 
+import com.ecommerce.produto.dtos.PrecoRecordDTO;
 import com.ecommerce.produto.dtos.ProdutoRecordDTO;
 import com.ecommerce.produto.models.ProdutoModel;
 import com.ecommerce.produto.models.ProdutoModelElasticSearch;
@@ -48,5 +49,11 @@ public class ProdutoController {
                 .body(produtoService.atualizarDadosProduto(id,produtoDTO));
     }
 
+    @PatchMapping("/{id}")
+    public ResponseEntity<Void> atualizarPrecoProduto(@PathVariable(value = "id") UUID id,
+                                                      @RequestBody @Valid PrecoRecordDTO produtoprecoDTO){
+        produtoService.atualizarPrecoProduto(id,produtoprecoDTO);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 
 }
