@@ -11,6 +11,7 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.io.Serializable;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -18,7 +19,9 @@ import java.util.UUID;
 @Getter
 @Setter
 @Document(indexName = "produtos")
-public class ProdutoModelElasticSearch {
+public class ProdutoModelElasticSearch implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Id
     @Field(type = FieldType.Keyword)
