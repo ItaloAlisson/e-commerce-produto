@@ -10,6 +10,7 @@ import com.ecommerce.produto.models.ProdutoModelElasticSearch;
 import com.ecommerce.produto.repositories.ProdutoElasticSearchRepository;
 import com.ecommerce.produto.repositories.ProdutoRepository;
 import com.ecommerce.produto.validation.ProdutoValidator;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,7 @@ public class ProdutoService {
         this.produtoMapper = produtoMapper;
     }
 
-
+    @Transactional
     public ProdutoModel registrarProduto(ProdutoRecordDTO produtoDTO) {
         produtoValidator.existePorNome(produtoDTO.nome());
         var novoProduto = produtoMapper.produtoDTOParaProdutoModel(produtoDTO);
@@ -53,6 +54,7 @@ public class ProdutoService {
                                 + " não foi encontrado."));
     }
 
+    @Transactional
     public ProdutoModel atualizarDadosProduto(UUID id,ProdutoRecordDTO produtoDTO) {
         var produto = produtoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
@@ -65,6 +67,7 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
+    @Transactional
     public void atualizarPrecoProduto(UUID id, PrecoProdutoRecordDTO precoProdutoDTO) {
         var produto = produtoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
@@ -77,6 +80,7 @@ public class ProdutoService {
         produtoRepository.save(produto);
     }
 
+    @Transactional
     public void atualizarQuantidadeProduto(UUID id, QuantidadeProdutoRecordDTO quantidadeProdutoDTO) {
         var produto = produtoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
@@ -89,6 +93,7 @@ public class ProdutoService {
         produtoRepository.save(produto);
     }
 
+    @Transactional
     public void deletarProduto(UUID id) {
         var produto = produtoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
