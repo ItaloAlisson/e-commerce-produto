@@ -1,7 +1,8 @@
 package com.ecommerce.produto.controllers;
 
-import com.ecommerce.produto.dtos.PrecoRecordDTO;
+import com.ecommerce.produto.dtos.PrecoProdutoRecordDTO;
 import com.ecommerce.produto.dtos.ProdutoRecordDTO;
+import com.ecommerce.produto.dtos.QuantidadeProdutoRecordDTO;
 import com.ecommerce.produto.models.ProdutoModel;
 import com.ecommerce.produto.models.ProdutoModelElasticSearch;
 import com.ecommerce.produto.services.ProdutoService;
@@ -49,10 +50,18 @@ public class ProdutoController {
                 .body(produtoService.atualizarDadosProduto(id,produtoDTO));
     }
 
-    @PatchMapping("/{id}")
+    @PatchMapping("/preco/{id}")
     public ResponseEntity<Void> atualizarPrecoProduto(@PathVariable(value = "id") UUID id,
-                                                      @RequestBody @Valid PrecoRecordDTO produtoprecoDTO){
+                                                      @RequestBody @Valid PrecoProdutoRecordDTO produtoprecoDTO){
         produtoService.atualizarPrecoProduto(id,produtoprecoDTO);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @PatchMapping("/quantidade/{id}")
+    public ResponseEntity<Void> atualizarQuantidadeProduto(@PathVariable(value = "id") UUID id,
+                                                           @RequestBody @Valid QuantidadeProdutoRecordDTO
+                                                                   quantidadeProdutoDTO){
+        produtoService.atualizarQuantidadeProduto(id,quantidadeProdutoDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

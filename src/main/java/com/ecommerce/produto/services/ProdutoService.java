@@ -1,7 +1,8 @@
 package com.ecommerce.produto.services;
 
-import com.ecommerce.produto.dtos.PrecoRecordDTO;
+import com.ecommerce.produto.dtos.PrecoProdutoRecordDTO;
 import com.ecommerce.produto.dtos.ProdutoRecordDTO;
+import com.ecommerce.produto.dtos.QuantidadeProdutoRecordDTO;
 import com.ecommerce.produto.exceptions.ResourceNotFoundException;
 import com.ecommerce.produto.mappers.ProdutoMapper;
 import com.ecommerce.produto.models.ProdutoModel;
@@ -65,12 +66,24 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
-    public void atualizarPrecoProduto(UUID id, @Valid PrecoRecordDTO produtoprecoDTO) {
+    public void atualizarPrecoProduto(UUID id, PrecoProdutoRecordDTO produtoprecoDTO) {
         var produto = produtoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
                         + " não foi encontrado."));
 
         produto.setPreco(produtoprecoDTO.preco());
+        var produtoElastic = produtoMapper.produtoModelParaModelElasticSearch(produto);
+        produtoElastic.setDataRegistro(produto.getDataRegistro().toInstant(ZoneOffset.UTC));
+        elasticSearchRepository.save(produtoElastic);
+        produtoRepository.save(produto);
+    }
+
+    public void atualizarQuantidadeProduto(UUID id, QuantidadeProdutoRecordDTO quantidadeProdutoDTO) {
+        var produto = produtoRepository.findById(id)
+                .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
+                        + " não foi encontrado."));
+
+        produto.setQuantidade(quantidadeProdutoDTO.quantidade());
         var produtoElastic = produtoMapper.produtoModelParaModelElasticSearch(produto);
         produtoElastic.setDataRegistro(produto.getDataRegistro().toInstant(ZoneOffset.UTC));
         elasticSearchRepository.save(produtoElastic);
