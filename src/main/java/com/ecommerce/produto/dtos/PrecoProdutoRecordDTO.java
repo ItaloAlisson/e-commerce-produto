@@ -4,6 +4,6 @@ import jakarta.validation.constraints.NotNull;
 
 import java.math.BigDecimal;
 
-public record PrecoRecordDTO(@NotNull(message ="Campo 'preco' não pode ser nulo!")
+public record PrecoProdutoRecordDTO(@NotNull(message ="Campo 'preco' não pode ser nulo!")
                              BigDecimal preco) {
 }

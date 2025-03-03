@@ -52,8 +52,8 @@ public class ProdutoController {
 
     @PatchMapping("/preco/{id}")
     public ResponseEntity<Void> atualizarPrecoProduto(@PathVariable(value = "id") UUID id,
-                                                      @RequestBody @Valid PrecoProdutoRecordDTO produtoprecoDTO){
-        produtoService.atualizarPrecoProduto(id,produtoprecoDTO);
+                                                      @RequestBody @Valid PrecoProdutoRecordDTO precoProdutoDTO){
+        produtoService.atualizarPrecoProduto(id, precoProdutoDTO);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 

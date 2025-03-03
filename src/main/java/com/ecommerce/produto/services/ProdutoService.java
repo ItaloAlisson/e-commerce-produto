@@ -10,7 +10,6 @@ import com.ecommerce.produto.models.ProdutoModelElasticSearch;
 import com.ecommerce.produto.repositories.ProdutoElasticSearchRepository;
 import com.ecommerce.produto.repositories.ProdutoRepository;
 import com.ecommerce.produto.validation.ProdutoValidator;
-import jakarta.validation.Valid;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -66,12 +65,12 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
-    public void atualizarPrecoProduto(UUID id, PrecoProdutoRecordDTO produtoprecoDTO) {
+    public void atualizarPrecoProduto(UUID id, PrecoProdutoRecordDTO precoProdutoDTO) {
         var produto = produtoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
                         + " não foi encontrado."));
 
-        produto.setPreco(produtoprecoDTO.preco());
+        produto.setPreco(precoProdutoDTO.preco());
         var produtoElastic = produtoMapper.produtoModelParaModelElasticSearch(produto);
         produtoElastic.setDataRegistro(produto.getDataRegistro().toInstant(ZoneOffset.UTC));
         elasticSearchRepository.save(produtoElastic);
