@@ -12,6 +12,8 @@ import com.ecommerce.produto.repositories.ProdutoRepository;
 import com.ecommerce.produto.validation.ProdutoValidator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneOffset;
@@ -32,6 +34,7 @@ public class ProdutoService {
         this.produtoMapper = produtoMapper;
     }
 
+    @CacheEvict(value = "produtos", allEntries = true)
     @Transactional
     public ProdutoModel registrarProduto(ProdutoRecordDTO produtoDTO) {
         produtoValidator.existePorNome(produtoDTO.nome());
@@ -43,10 +46,12 @@ public class ProdutoService {
         return novoProduto;
     }
 
+    @Cacheable(value = "produtos")
     public Iterable<ProdutoModelElasticSearch> buscarProdutos() {
         return elasticSearchRepository.findAll();
     }
 
+    @Cacheable(value = "produtos", key = "#nome")
     public ProdutoModelElasticSearch buscarProdutoPorNome(String nome) {
         return elasticSearchRepository.findByNome(nome)
                 .orElseThrow(()->
@@ -54,6 +59,7 @@ public class ProdutoService {
                                 + " não foi encontrado."));
     }
 
+    @CacheEvict(value = "produtos", allEntries = true)
     @Transactional
     public ProdutoModel atualizarDadosProduto(UUID id,ProdutoRecordDTO produtoDTO) {
         var produto = produtoRepository.findById(id)
@@ -67,6 +73,7 @@ public class ProdutoService {
         return produtoRepository.save(produto);
     }
 
+    @CacheEvict(value = "produtos", allEntries = true)
     @Transactional
     public void atualizarPrecoProduto(UUID id, PrecoProdutoRecordDTO precoProdutoDTO) {
         var produto = produtoRepository.findById(id)
@@ -80,6 +87,7 @@ public class ProdutoService {
         produtoRepository.save(produto);
     }
 
+    @CacheEvict(value = "produtos", allEntries = true)
     @Transactional
     public void atualizarQuantidadeProduto(UUID id, QuantidadeProdutoRecordDTO quantidadeProdutoDTO) {
         var produto = produtoRepository.findById(id)
@@ -93,6 +101,7 @@ public class ProdutoService {
         produtoRepository.save(produto);
     }
 
+    @CacheEvict(value = "produtos", allEntries = true)
     @Transactional
     public void deletarProduto(UUID id) {
         var produto = produtoRepository.findById(id)
