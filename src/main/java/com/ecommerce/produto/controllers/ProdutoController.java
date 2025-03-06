@@ -1,14 +1,11 @@
 package com.ecommerce.produto.controllers;
 
-import com.ecommerce.produto.dtos.PrecoProdutoRecordDTO;
 import com.ecommerce.produto.dtos.ProdutoRecordDTO;
-import com.ecommerce.produto.dtos.QuantidadeProdutoRecordDTO;
 import com.ecommerce.produto.models.ProdutoModel;
 import com.ecommerce.produto.models.ProdutoModelElasticSearch;
 import com.ecommerce.produto.producers.RabbitMQProducer;
 import com.ecommerce.produto.services.ProdutoService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

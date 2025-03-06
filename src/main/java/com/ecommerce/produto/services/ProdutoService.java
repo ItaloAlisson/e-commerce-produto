@@ -1,8 +1,6 @@
 package com.ecommerce.produto.services;
 
-import com.ecommerce.produto.dtos.PrecoProdutoRecordDTO;
 import com.ecommerce.produto.dtos.ProdutoRecordDTO;
-import com.ecommerce.produto.dtos.QuantidadeProdutoRecordDTO;
 import com.ecommerce.produto.exceptions.ResourceNotFoundException;
 import com.ecommerce.produto.mappers.ProdutoMapper;
 import com.ecommerce.produto.models.ProdutoModel;
@@ -17,7 +15,6 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
-import java.time.ZoneOffset;
 import java.util.UUID;
 
 @Service
