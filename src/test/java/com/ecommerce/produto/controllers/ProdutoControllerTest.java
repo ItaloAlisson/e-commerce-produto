@@ -67,7 +67,8 @@ class ProdutoControllerTest {
     @Test
     void quandoRegistrarProduto_EntaoRetornarProdutoRegistradoComHttpStatus201() throws Exception {
 
-        when(produtoService.registrarProduto(any(ProdutoRecordDTO.class))).thenReturn(produtoDB);
+        when(produtoService.registrarProduto(any(ProdutoRecordDTO.class)))
+                .thenReturn(produtoDB);
 
         ResultActions resultado = mock.perform(post("/produtos")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -92,7 +93,8 @@ class ProdutoControllerTest {
     @Test
     void quandoBuscarTodosProdutos_EntaoRetornarProdutosComHttpStatus200() throws Exception {
 
-        when(produtoService.buscarProdutos()).thenReturn(produtoElasticDB);
+        when(produtoService.buscarProdutos())
+                .thenReturn(produtoElasticDB);
 
         ResultActions resultado = mock.perform(get("/produtos")
                 .contentType(MediaType.APPLICATION_JSON));
@@ -111,5 +113,31 @@ class ProdutoControllerTest {
                         "Som Dolby Atmos e tela Full HD+ de 6,8” com superbrilho e Smart Water Touch. " +
                         "Velocidade e eficiência do novo Snapdragon."));
     }
+
+    @DisplayName(" Quando buscar um produto por nome, " +
+            "então retornar produto com http status 200")
+    @Test
+    void quandoBuscarProdutoPorNome_EntaoRetornarProdutoComHttpStatus200() throws Exception {
+
+        when(produtoService.buscarProdutoPorNome("Moto G75"))
+                .thenReturn(produtoElasticDB.iterator().next());
+
+        ResultActions resultado = mock.perform(get("/produtos/Moto G75")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        resultado.andDo(print())
+                .andExpect(jsonPath("$.id").value("2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602"))
+                .andExpect(jsonPath("$.nome").value("Moto G75"))
+                .andExpect(jsonPath("$.marca").value("Motorola"))
+                .andExpect(jsonPath("$.preco").value("1600.0"))
+                .andExpect(jsonPath("$.quantidade").value("420"))
+                .andExpect(jsonPath("$.categoria").value("TECNOLOGIA"))
+                .andExpect(jsonPath("$.descricao").value("Primeiro moto g com ultrarresistência, " +
+                        "O poder da IA e a câmera Sony - LYTIA 600, 5 anos de atualização de Android, " +
+                        "Som Dolby Atmos e tela Full HD+ de 6,8” com superbrilho e Smart Water Touch. " +
+                        "Velocidade e eficiência do novo Snapdragon."));
+    }
+
+
 
 }
