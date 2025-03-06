@@ -15,7 +15,7 @@ public class ProdutoValidator {
 
     public void existePorNome(String nome){
         if (produtoRepository.existsByNome(nome)){
-            throw new ConflictException("Produto" + nome
+            throw new ConflictException("Produto " + nome
                     + " já cadastrado!");
         }
     }

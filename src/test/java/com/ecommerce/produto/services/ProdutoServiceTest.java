@@ -1,6 +1,7 @@
 package com.ecommerce.produto.services;
 
 import com.ecommerce.produto.dtos.ProdutoRecordDTO;
+import com.ecommerce.produto.exceptions.ConflictException;
 import com.ecommerce.produto.mappers.ProdutoMapper;
 import com.ecommerce.produto.models.ProdutoModel;
 import com.ecommerce.produto.models.ProdutoModelElasticSearch;
@@ -74,6 +75,25 @@ class ProdutoServiceTest {
         verify(validator).existePorNome(produtoDTO.nome());
         verify(produtoRepository).save(produtoParaPersistencia);
     }
+
+    @DisplayName(" Quando registrar o produto existente" +
+            "então lançar ConflictException")
+    @Test
+    void quandoRegistrarProdutoExistente_EntaoLancarConflictException() {
+
+        doThrow(new ConflictException("Produto " +
+                produtoDTO.nome() + " já cadastrado!"))
+                .when(validator).existePorNome(produtoDTO.nome());
+
+        var exception = assertThrows(ConflictException.class,
+                () -> produtoService.registrarProduto(produtoDTO));
+
+        assertEquals("Produto " +
+                produtoDTO.nome()
+                + " já cadastrado!", exception.getMessage());
+        verify(validator).existePorNome(produtoDTO.nome());
+    }
+
 
 
 }
