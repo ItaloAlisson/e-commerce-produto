@@ -23,13 +23,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
+import java.util.UUID;
 
 import static com.ecommerce.produto.TestDataFactory.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,7 +50,9 @@ class ProdutoControllerTest {
     private RabbitMQProducer rabbitMQProducer;
 
     private ProdutoRecordDTO produtoDTO;
+    private ProdutoRecordDTO produtoDTOAtualizado;
     private ProdutoModel produtoDB;
+    private ProdutoModel produtoDBAtualizado;
     private Iterable<ProdutoModelElasticSearch> produtoElasticDB;
 
 
@@ -58,7 +60,9 @@ class ProdutoControllerTest {
     void setUp() {
         MockitoAnnotations.openMocks(this);
         produtoDTO = produtoDTO();
+        produtoDTOAtualizado = produtoDTOAtualizado();
         produtoDB = produtoDB();
+        produtoDBAtualizado = produtoDBAtualizado();
         produtoElasticDB = produtoElasticDB();
     }
 
@@ -137,6 +141,35 @@ class ProdutoControllerTest {
                         "Som Dolby Atmos e tela Full HD+ de 6,8” com superbrilho e Smart Water Touch. " +
                         "Velocidade e eficiência do novo Snapdragon."));
     }
+
+    @DisplayName(" Quando atualizar dados do produto, " +
+            "então retornar produto atualizado com http status 200")
+    @Test
+    void quandoAtualizarDadosProduto_EntaoRetornarProdutoAtualizadoComHttpStatus200() throws Exception {
+
+        when(produtoService.atualizarDadosProduto(any(UUID.class),
+                any(ProdutoRecordDTO.class))).thenReturn(produtoDBAtualizado);
+
+        ResultActions resultado = mock.perform(
+                put("/produtos/2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(mapper.writeValueAsString(produtoDTOAtualizado)));
+
+        resultado.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value("2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602"))
+                .andExpect(jsonPath("$.nome").value("Moto G75"))
+                .andExpect(jsonPath("$.marca").value("Motorola"))
+                .andExpect(jsonPath("$.preco").value("2000"))
+                .andExpect(jsonPath("$.quantidade").value("320"))
+                .andExpect(jsonPath("$.categoria").value("TECNOLOGIA"))
+                .andExpect(jsonPath("$.descricao").value("Primeiro moto g " +
+                        "com ultrarresistência, O poder da IA e a câmera Sony - LYTIA 600, 5 anos de atualização de" +
+                        " Android, Som Dolby Atmos e tela Full HD+ de 6,8” com superbrilho e Smart Water Touch ." +
+                        " Velocidade e eficiência do novo Snapdragon."));
+    }
+
+
 
 
 
