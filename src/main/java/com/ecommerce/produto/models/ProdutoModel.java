@@ -23,7 +23,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ProdutoModel implements Serializable {
 
-    private static final long serialversionUID = 2L;
+    private static final long serialversionUID = 3L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private UUID id;
@@ -40,9 +40,6 @@ public class ProdutoModel implements Serializable {
     private CategoriaEnum categoria;
     @Column(columnDefinition = "TEXT")
     private String descricao;
-    @CreationTimestamp
-    @Column(nullable = false, updatable = false)
-    private LocalDateTime dataRegistro;
 
     public ProdutoModel(String nome, String marca, BigDecimal preco, Integer quantidade, CategoriaEnum categoria, String descricao) {
         this.nome = nome;

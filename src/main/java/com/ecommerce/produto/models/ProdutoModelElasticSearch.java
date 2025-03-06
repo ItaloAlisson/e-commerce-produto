@@ -2,26 +2,27 @@ package com.ecommerce.produto.models;
 
 import com.ecommerce.produto.enums.CategoriaEnum;
 import jakarta.persistence.Id;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Document(indexName = "produtos")
 public class ProdutoModelElasticSearch implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     @Id
     @Field(type = FieldType.Keyword)
@@ -38,8 +39,7 @@ public class ProdutoModelElasticSearch implements Serializable {
     private CategoriaEnum categoria;
     @Field(type = FieldType.Text)
     private String descricao;
-    @Field(type = FieldType.Date)
-    private Instant dataRegistro;
+
 
 
 }

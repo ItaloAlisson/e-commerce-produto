@@ -8,8 +8,6 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ProdutoMapper {
-
     ProdutoModel produtoDTOParaProdutoModel(ProdutoRecordDTO produtoDTO);
-    @Mapping(target = "dataRegistro", ignore = true)
     ProdutoModelElasticSearch produtoModelParaModelElasticSearch(ProdutoModel produtoModel);
 }

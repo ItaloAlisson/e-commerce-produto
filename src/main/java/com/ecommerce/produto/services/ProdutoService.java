@@ -12,6 +12,7 @@ import com.ecommerce.produto.repositories.ProdutoRepository;
 import com.ecommerce.produto.validation.ProdutoValidator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -22,11 +23,12 @@ import java.util.UUID;
 @Service
 public class ProdutoService {
 
-    private final   ProdutoRepository produtoRepository;
-    private final ProdutoElasticSearchRepository elasticSearchRepository;
-    private final ProdutoValidator produtoValidator;
-    private final ProdutoMapper produtoMapper;
+    private  ProdutoRepository produtoRepository;
+    private  ProdutoElasticSearchRepository elasticSearchRepository;
+    private  ProdutoValidator produtoValidator;
+    private  ProdutoMapper produtoMapper;
 
+    @Autowired
     public ProdutoService(ProdutoRepository produtoRepository, ProdutoElasticSearchRepository elasticSearchRepository, ProdutoValidator produtoValidator, ProdutoMapper produtoMapper) {
         this.produtoRepository = produtoRepository;
         this.elasticSearchRepository = elasticSearchRepository;
@@ -41,7 +43,6 @@ public class ProdutoService {
         var novoProduto = produtoMapper.produtoDTOParaProdutoModel(produtoDTO);
         novoProduto = produtoRepository.save(novoProduto);
         var novoProdutoElastic = produtoMapper.produtoModelParaModelElasticSearch(novoProduto);
-        novoProdutoElastic.setDataRegistro(novoProduto.getDataRegistro().toInstant(ZoneOffset.UTC));
         elasticSearchRepository.save(novoProdutoElastic);
         return novoProduto;
     }
@@ -68,7 +69,6 @@ public class ProdutoService {
 
         BeanUtils.copyProperties(produtoDTO,produto,"id");
         var produtoElastic = produtoMapper.produtoModelParaModelElasticSearch(produto);
-        produtoElastic.setDataRegistro(produto.getDataRegistro().toInstant(ZoneOffset.UTC));
         elasticSearchRepository.save(produtoElastic);
         return produtoRepository.save(produto);
     }
@@ -82,7 +82,6 @@ public class ProdutoService {
 
         produto.setPreco(precoProdutoDTO.preco());
         var produtoElastic = produtoMapper.produtoModelParaModelElasticSearch(produto);
-        produtoElastic.setDataRegistro(produto.getDataRegistro().toInstant(ZoneOffset.UTC));
         elasticSearchRepository.save(produtoElastic);
         produtoRepository.save(produto);
     }
@@ -96,7 +95,6 @@ public class ProdutoService {
 
         produto.setQuantidade(quantidadeProdutoDTO.quantidade());
         var produtoElastic = produtoMapper.produtoModelParaModelElasticSearch(produto);
-        produtoElastic.setDataRegistro(produto.getDataRegistro().toInstant(ZoneOffset.UTC));
         elasticSearchRepository.save(produtoElastic);
         produtoRepository.save(produto);
     }
