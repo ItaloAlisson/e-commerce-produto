@@ -114,6 +114,21 @@ class ProdutoServiceTest {
         verify(elasticSearchRepository).findAll();
     }
 
+    @DisplayName("Quando buscar um produto por nome" +
+            "            então retornar produto")
+    @Test
+    void quandoBuscarProdutoPorNome_EntaoRetornarProduto() {
+
+        when(elasticSearchRepository.findByNome("Moto G75")).thenReturn(Optional.ofNullable(
+                produtoElasticDB.iterator().next()));
+
+        var resultado = produtoService.buscarProdutoPorNome("Moto G75");
+
+        assertNotNull(resultado);
+        assertEquals("Moto G75", resultado.getNome());
+        verify(elasticSearchRepository).findByNome("Moto G75");
+    }
+
 
 
 }
