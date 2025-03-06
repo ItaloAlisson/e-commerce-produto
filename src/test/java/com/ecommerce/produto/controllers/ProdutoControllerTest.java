@@ -28,6 +28,7 @@ import java.util.UUID;
 import static com.ecommerce.produto.TestDataFactory.*;
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -167,6 +168,21 @@ class ProdutoControllerTest {
                         "com ultrarresistência, O poder da IA e a câmera Sony - LYTIA 600, 5 anos de atualização de" +
                         " Android, Som Dolby Atmos e tela Full HD+ de 6,8” com superbrilho e Smart Water Touch ." +
                         " Velocidade e eficiência do novo Snapdragon."));
+    }
+
+    @DisplayName(" Quando deletar o produto, " +
+            "então retornar http status 204")
+    @Test
+    void quandoDeletarProduto_EntaoRetornarHttpStatus204() throws Exception {
+
+        doNothing().when(produtoService).deletarProduto(UUID.fromString("2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602"));
+
+        ResultActions resultado = mock.perform(
+                delete("/produtos/2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602"));
+
+        resultado.andDo(print())
+                .andExpect(status().isNoContent());
+
     }
 
 
