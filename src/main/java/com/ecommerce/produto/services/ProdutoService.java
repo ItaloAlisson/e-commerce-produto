@@ -39,8 +39,7 @@ public class ProdutoService {
         produtoValidator.existePorNome(produtoDTO.nome());
         var novoProduto = produtoMapper.produtoDTOParaProdutoModel(produtoDTO);
         novoProduto = produtoRepository.save(novoProduto);
-        var novoProdutoElastic = produtoMapper.produtoModelParaModelElasticSearch(novoProduto);
-        elasticSearchRepository.save(novoProdutoElastic);
+        elasticSearchRepository.save(produtoMapper.produtoModelParaModelElasticSearch(novoProduto));
         return novoProduto;
     }
 
