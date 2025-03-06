@@ -52,7 +52,7 @@ public class ProdutoService {
     public ProdutoModelElasticSearch buscarProdutoPorNome(String nome) {
         return elasticSearchRepository.findByNome(nome)
                 .orElseThrow(()->
-                        new ResourceNotFoundException("Produto com o nome " + nome
+                        new ResourceNotFoundException("Produto " + nome
                                 + " não foi encontrado."));
     }
 

@@ -2,6 +2,7 @@ package com.ecommerce.produto.services;
 
 import com.ecommerce.produto.dtos.ProdutoRecordDTO;
 import com.ecommerce.produto.exceptions.ConflictException;
+import com.ecommerce.produto.exceptions.ResourceNotFoundException;
 import com.ecommerce.produto.mappers.ProdutoMapper;
 import com.ecommerce.produto.models.ProdutoModel;
 import com.ecommerce.produto.models.ProdutoModelElasticSearch;
@@ -127,6 +128,22 @@ class ProdutoServiceTest {
         assertNotNull(resultado);
         assertEquals("Moto G75", resultado.getNome());
         verify(elasticSearchRepository).findByNome("Moto G75");
+    }
+
+    @DisplayName("Quando buscar um produto por nome inexistente" +
+            "            então lançar ResourceNotFoundException")
+    @Test
+    void quandoBuscarProdutoPorNomeInexistente_EntaoLancarResourceNotFoundException() {
+
+        when(elasticSearchRepository.findByNome("Iphone 16")).thenReturn(Optional.empty());
+
+        var exception = assertThrows(ResourceNotFoundException.class,
+                () -> produtoService.buscarProdutoPorNome("Iphone 16"));
+
+        assertEquals("Produto " +
+                "Iphone 16" +
+                " não foi encontrado.", exception.getMessage());
+        verify(elasticSearchRepository).findByNome("Iphone 16");
     }
 
 
