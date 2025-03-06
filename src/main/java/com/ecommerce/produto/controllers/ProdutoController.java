@@ -58,20 +58,6 @@ public class ProdutoController {
                 .body(produtoAtualizado);
     }
 
-    @PatchMapping("/preco/{id}")
-    public ResponseEntity<Void> atualizarPrecoProduto(@PathVariable(value = "id") UUID id,
-                                                      @RequestBody @Valid PrecoProdutoRecordDTO precoProdutoDTO){
-        produtoService.atualizarPrecoProduto(id, precoProdutoDTO);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
-
-    @PatchMapping("/quantidade/{id}")
-    public ResponseEntity<Void> atualizarQuantidadeProduto(@PathVariable(value = "id") UUID id,
-                                                           @RequestBody @Valid QuantidadeProdutoRecordDTO
-                                                                   quantidadeProdutoDTO){
-        produtoService.atualizarQuantidadeProduto(id,quantidadeProdutoDTO);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletarProduto(@PathVariable(value = "id") UUID id) {

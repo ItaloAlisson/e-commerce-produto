@@ -75,32 +75,6 @@ public class ProdutoService {
 
     @CacheEvict(value = "produtos", allEntries = true)
     @Transactional
-    public void atualizarPrecoProduto(UUID id, PrecoProdutoRecordDTO precoProdutoDTO) {
-        var produto = produtoRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
-                        + " não foi encontrado."));
-
-        produto.setPreco(precoProdutoDTO.preco());
-        var produtoElastic = produtoMapper.produtoModelParaModelElasticSearch(produto);
-        elasticSearchRepository.save(produtoElastic);
-        produtoRepository.save(produto);
-    }
-
-    @CacheEvict(value = "produtos", allEntries = true)
-    @Transactional
-    public void atualizarQuantidadeProduto(UUID id, QuantidadeProdutoRecordDTO quantidadeProdutoDTO) {
-        var produto = produtoRepository.findById(id)
-                .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
-                        + " não foi encontrado."));
-
-        produto.setQuantidade(quantidadeProdutoDTO.quantidade());
-        var produtoElastic = produtoMapper.produtoModelParaModelElasticSearch(produto);
-        elasticSearchRepository.save(produtoElastic);
-        produtoRepository.save(produto);
-    }
-
-    @CacheEvict(value = "produtos", allEntries = true)
-    @Transactional
     public void deletarProduto(UUID id) {
         var produto = produtoRepository.findById(id)
                 .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
