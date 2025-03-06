@@ -18,7 +18,7 @@ public class ProdutoController {
 
 
     private  ProdutoService produtoService;
-    private  RabbitMQProducer rabbitMQProducer;
+    private final  RabbitMQProducer rabbitMQProducer;
 
     public ProdutoController(ProdutoService produtoService, RabbitMQProducer rabbitMQProducer) {
         this.produtoService = produtoService;
