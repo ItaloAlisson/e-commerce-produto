@@ -10,17 +10,25 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.hamcrest.HamcrestArgumentMatcher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.List;
+
 import static com.ecommerce.produto.TestDataFactory.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -43,7 +51,7 @@ class ProdutoControllerTest {
 
     private ProdutoRecordDTO produtoDTO;
     private ProdutoModel produtoDB;
-    private ProdutoModelElasticSearch produtoElasticDB;
+    private Iterable<ProdutoModelElasticSearch> produtoElasticDB;
 
 
     @BeforeEach
@@ -67,14 +75,41 @@ class ProdutoControllerTest {
 
         resultado.andDo(print())
                 .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.id").value("2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602"))
                 .andExpect(jsonPath("$.nome").value("Moto G75"))
                 .andExpect(jsonPath("$.marca").value("Motorola"))
                 .andExpect(jsonPath("$.preco").value("1600"))
                 .andExpect(jsonPath("$.quantidade").value("420"))
                 .andExpect(jsonPath("$.categoria").value("TECNOLOGIA"))
                 .andExpect(jsonPath("$.descricao").value("Primeiro moto g " +
-                        "com ultrarrêsistencia, O poder da IA e a câmera Sony - LYTIA 600, 5 anos de atualização de" +
+                        "com ultrarresistência, O poder da IA e a câmera Sony - LYTIA 600, 5 anos de atualização de" +
                         " Android, Som Dolby Atmos e tela Full HD+ de 6,8” com superbrilho e Smart Water Touch ." +
                         " Velocidade e eficiência do novo Snapdragon."));
     }
+
+    @DisplayName(" Quando buscar todos os produtos, " +
+            "então retornar produtos com http status 200")
+    @Test
+    void quandoBuscarTodosProdutos_EntaoRetornarProdutosComHttpStatus200() throws Exception {
+
+        when(produtoService.buscarProdutos()).thenReturn(produtoElasticDB);
+
+        ResultActions resultado = mock.perform(get("/produtos")
+                .contentType(MediaType.APPLICATION_JSON));
+
+        resultado.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id").value("2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602"))
+                .andExpect(jsonPath("$[0].nome").value("Moto G75"))
+                .andExpect(jsonPath("$[0].marca").value("Motorola"))
+                .andExpect(jsonPath("$[0].preco").value("1600.0"))
+                .andExpect(jsonPath("$[0].quantidade").value("420"))
+                .andExpect(jsonPath("$[0].categoria").value("TECNOLOGIA"))
+                .andExpect(jsonPath("$[0].descricao").value("Primeiro moto g com ultrarresistência, " +
+                        "O poder da IA e a câmera Sony - LYTIA 600, 5 anos de atualização de Android, " +
+                        "Som Dolby Atmos e tela Full HD+ de 6,8” com superbrilho e Smart Water Touch. " +
+                        "Velocidade e eficiência do novo Snapdragon."));
+    }
+
 }
