@@ -33,6 +33,15 @@ public class TestDataFactory {
                 "Full HD+ de 6,8” com superbrilho e Smart Water Touch . Velocidade e eficiência do novo Snapdragon.");
 
     }
+    public static ProdutoModelElasticSearch produtoElasticParaPersistencia(){
+        return new ProdutoModelElasticSearch(UUID.fromString("2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602")
+                ,"Moto G75","Motorola",1600.00,420,
+                CategoriaEnum.TECNOLOGIA,"Primeiro moto g com ultrarresistência," +
+                " O poder da IA e a câmera Sony - LYTIA 600, 5 anos de atualização de Android, Som Dolby Atmos e tela "+
+                "Full HD+ de 6,8” com superbrilho e Smart Water Touch . Velocidade e eficiência do novo Snapdragon.");
+
+    }
+
 
     public static ProdutoModel produtoDB(){
         return new ProdutoModel(UUID.fromString("2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602"),"Moto G75",
