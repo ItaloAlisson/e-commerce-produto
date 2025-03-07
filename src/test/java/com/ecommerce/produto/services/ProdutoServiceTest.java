@@ -13,17 +13,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import static com.ecommerce.produto.TestDataFactory.*;
 import static org.junit.jupiter.api.Assertions.*;
@@ -51,6 +48,7 @@ class ProdutoServiceTest {
     private ProdutoModel produtoDBAtualizado;
     private Iterable<ProdutoModelElasticSearch> produtoElasticDB;
     private ProdutoModelElasticSearch produtoElasticParaPersistencia;
+    private ProdutoModelElasticSearch produtoElasticParaPersistenciaAtualizado;
 
     @BeforeEach
     void setUp() {
@@ -62,6 +60,7 @@ class ProdutoServiceTest {
         produtoDBAtualizado = produtoDBAtualizado();
         produtoElasticDB = produtoElasticDB();
         produtoElasticParaPersistencia= produtoElasticParaPersistencia();
+        produtoElasticParaPersistenciaAtualizado = produtoElasticParaPersistenciaAtualizado();
     }
 
     @DisplayName(" Quando registrar o produto" +
@@ -82,6 +81,7 @@ class ProdutoServiceTest {
         assertNotNull(resultado);
         verify(validator).existePorNome(produtoDTO.nome());
         verify(produtoRepository).save(produtoParaPersistencia);
+        verify(elasticSearchRepository).save(produtoElasticParaPersistenciaAtualizado);
     }
 
     @DisplayName(" Quando registrar o produto existente" +
@@ -144,6 +144,32 @@ class ProdutoServiceTest {
                 "Iphone 16" +
                 " não foi encontrado.", exception.getMessage());
         verify(elasticSearchRepository).findByNome("Iphone 16");
+    }
+
+    @DisplayName(" Quando atualizar dados do produto" +
+            "então retornar o produto atualizado")
+    @Test
+    void quandoAtualizarDadosProduto_EntaoRetornarProdutoAtualizado() {
+
+        when(produtoRepository.findById(UUID.fromString("2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602")))
+                .thenReturn(Optional.ofNullable(produtoDB));
+        when(mapper.produtoModelParaModelElasticSearch(any(ProdutoModel.class)))
+                .thenReturn(produtoElasticParaPersistenciaAtualizado);
+        when(produtoRepository.save(any(ProdutoModel.class))).thenReturn(produtoDBAtualizado);
+        when(elasticSearchRepository.save(any(ProdutoModelElasticSearch.class))).thenReturn(
+                (produtoElasticParaPersistenciaAtualizado));
+
+        var resultado = produtoService.atualizarDadosProduto(UUID.fromString(
+                "2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602"),produtoDTOAtualizado);
+
+        assertNotNull(resultado);
+        verify(produtoRepository).findById(UUID.fromString("2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602"));
+        ArgumentCaptor<ProdutoModel> captor = ArgumentCaptor.forClass(ProdutoModel.class);
+        verify(produtoRepository).save(captor.capture());
+        ArgumentCaptor<ProdutoModelElasticSearch> captorElastic =
+                ArgumentCaptor.forClass(ProdutoModelElasticSearch.class);
+        verify(elasticSearchRepository).save(captorElastic.capture());
+
     }
 
 
