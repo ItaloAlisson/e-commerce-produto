@@ -1,6 +1,7 @@
 package com.ecommerce.produto.validation;
 
 import com.ecommerce.produto.dtos.ProdutoRecordDTO;
+import com.ecommerce.produto.exceptions.ConflictException;
 import com.ecommerce.produto.repositories.ProdutoRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -44,4 +45,20 @@ class ProdutoValidatorTest {
 
         verify(produtoRepository).existsByNome("Iphone 16");
     }
+
+    @DisplayName(" Quando validar o produto com nome existente" +
+            "então lançar ConflictException")
+    @Test
+    void quandoValidarProdutoNomeExistente_EntaoLancarConflictException() {
+
+        when(produtoRepository.existsByNome("Moto G75")).thenReturn(true);
+
+        var exception = assertThrows(ConflictException.class,
+                () -> produtoValidator.existePorNome("Moto G75"));
+
+        assertEquals("Produto Moto G75 já cadastrado!", exception.getMessage());
+        verify(produtoRepository).existsByNome("Moto G75");
+    }
+
+
 }
