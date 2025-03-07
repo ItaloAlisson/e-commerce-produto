@@ -189,6 +189,25 @@ class ProdutoServiceTest {
         verify(produtoRepository).findById(UUID.fromString("3ab01e6f-da08-4c88-93eb-73ccd94509a7"));
     }
 
+    @DisplayName(" Deve deletar o produto")
+    @Test
+    void deveDeletarProduto() {
+
+        when(produtoRepository.findById(UUID.fromString("2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602")))
+                .thenReturn(Optional.ofNullable(produtoDB));
+        when(elasticSearchRepository.findById(UUID.fromString("2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602")))
+                .thenReturn(Optional.ofNullable(produtoElasticDB.iterator().next()));
+
+        produtoService.deletarProduto(UUID.fromString(
+                "2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602"));
+
+
+        verify(produtoRepository).findById(UUID.fromString("2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602"));
+        verify(produtoRepository).delete(produtoDB);
+        verify(elasticSearchRepository).findById(UUID.fromString("2c1bd9c6-ecd4-44e4-9f3d-fe54c7a56602"));
+        verify(elasticSearchRepository).delete(produtoElasticDB.iterator().next());
+    }
+
 
 
 }
