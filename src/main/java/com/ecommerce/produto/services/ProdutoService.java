@@ -76,7 +76,10 @@ public class ProdutoService {
                 .orElseThrow(()-> new ResourceNotFoundException("Produto com o ID " + id
                         + " não foi encontrado."));
 
-        var produtoElastic = produtoMapper.produtoModelParaModelElasticSearch(produto);
+        var produtoElastic = elasticSearchRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Produto com o ID " + id
+                        + " não foi encontrado."));
+
         elasticSearchRepository.delete(produtoElastic);
         produtoRepository.delete(produto);
     }
