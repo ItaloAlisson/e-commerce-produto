@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProdutoValidator {
 
-    private final ProdutoRepository produtoRepository;
+    private ProdutoRepository produtoRepository;
 
     public ProdutoValidator(ProdutoRepository produtoRepository) {
         this.produtoRepository = produtoRepository;
