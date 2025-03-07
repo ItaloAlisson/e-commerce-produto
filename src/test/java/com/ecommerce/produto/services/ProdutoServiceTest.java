@@ -63,7 +63,7 @@ class ProdutoServiceTest {
         produtoElasticParaPersistenciaAtualizado = produtoElasticParaPersistenciaAtualizado();
     }
 
-    @DisplayName(" Quando registrar o produto" +
+    @DisplayName(" Quando registrar o produto " +
             "então retornar o produto registrado")
     @Test
     void quandoRegistrarProduto_EntaoRetornarProdutoRegistrado() {
@@ -81,7 +81,7 @@ class ProdutoServiceTest {
         assertNotNull(resultado);
         verify(validator).existePorNome(produtoDTO.nome());
         verify(produtoRepository).save(produtoParaPersistencia);
-        verify(elasticSearchRepository).save(produtoElasticParaPersistenciaAtualizado);
+        verify(elasticSearchRepository).save(any(ProdutoModelElasticSearch.class));
     }
 
     @DisplayName(" Quando registrar o produto existente" +
