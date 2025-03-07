@@ -226,6 +226,25 @@ class ProdutoServiceTest {
         verify(produtoRepository).findById(UUID.fromString("8fc8bb46-2cca-4423-a240-26cf7b373ab5"));
     }
 
+    @DisplayName("Quando deletar o produto inexistente no ElasticSearch" +
+            "            então lançar ResourceNotFoundException")
+    @Test
+    void quandoDeletarProdutoInexistenteElasticSearch_EntaoLancarResourceNotFoundException() {
+        when(produtoRepository.findById(UUID.fromString("8fc8bb46-2cca-4423-a240-26cf7b373ab5")))
+                .thenReturn(Optional.ofNullable(produtoDB));
+        when(elasticSearchRepository.findById(UUID.fromString("8fc8bb46-2cca-4423-a240-26cf7b373ab5")))
+                .thenReturn(Optional.empty());
+
+        var exception = assertThrows(ResourceNotFoundException.class,
+                () -> produtoService.deletarProduto(UUID.fromString(
+                        "8fc8bb46-2cca-4423-a240-26cf7b373ab5")));
+
+        assertEquals("Produto com o ID " +
+                "8fc8bb46-2cca-4423-a240-26cf7b373ab5" +
+                " não foi encontrado no ElasticSearch.", exception.getMessage());
+        verify(elasticSearchRepository).findById(UUID.fromString("8fc8bb46-2cca-4423-a240-26cf7b373ab5"));
+    }
+
 
 
 }
