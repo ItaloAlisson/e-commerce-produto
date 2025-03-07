@@ -169,7 +169,24 @@ class ProdutoServiceTest {
         ArgumentCaptor<ProdutoModelElasticSearch> captorElastic =
                 ArgumentCaptor.forClass(ProdutoModelElasticSearch.class);
         verify(elasticSearchRepository).save(captorElastic.capture());
+    }
 
+    @DisplayName("Quando atualizar dados do produto inexistente" +
+            "            então lançar ResourceNotFoundException")
+    @Test
+    void quandoAtualizarDadosProdutoInexistente_EntaoLancarResourceNotFoundException() {
+
+        when(produtoRepository.findById(UUID.fromString("3ab01e6f-da08-4c88-93eb-73ccd94509a7")))
+                .thenReturn(Optional.empty());
+
+        var exception = assertThrows(ResourceNotFoundException.class,
+                () -> produtoService.atualizarDadosProduto(UUID.fromString(
+                        "3ab01e6f-da08-4c88-93eb-73ccd94509a7"),produtoDTOAtualizado));
+
+        assertEquals("Produto com o ID " +
+                "3ab01e6f-da08-4c88-93eb-73ccd94509a7" +
+                " não foi encontrado.", exception.getMessage());
+        verify(produtoRepository).findById(UUID.fromString("3ab01e6f-da08-4c88-93eb-73ccd94509a7"));
     }
 
 
