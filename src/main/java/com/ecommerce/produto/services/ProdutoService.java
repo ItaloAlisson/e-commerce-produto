@@ -78,7 +78,7 @@ public class ProdutoService {
 
         var produtoElastic = elasticSearchRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Produto com o ID " + id
-                        + " não foi encontrado."));
+                        + " não foi encontrado no ElasticSearch."));
 
         elasticSearchRepository.delete(produtoElastic);
         produtoRepository.delete(produto);
