@@ -7,7 +7,6 @@ Esta é a segunda API do projeto de e-commerce, desenvolvida com Java 17 e Sprin
 - **Java 17**
 - **Spring Boot 3.4.3**
 - **Maven**
-- **Lombok** para simplificação de código
 - **SpringBoot DevTools** para desenvolvimento mais ágil
 - **Spring Data JPA** para integração com banco de dados
 - **ElasticSearch** para consultas rápidas e avançadas
@@ -79,7 +78,7 @@ Content-Type: application/json
   "marca": "Motorola",
   "preco": 1400.99,
   "quantidade": 600,
-  "categoria": "TECNOLOGIA",
+  "categoria": "1",
   "descricao": "Primeiro moto g com ultrarrêsistencia, O poder da IA e a câmera Sony - LYTIA 600, 5 anos de atualização de Android, Som Dolby Atmos e tela Full HD+ de 6,8” com superbrilho e Smart Water Touch . Velocidade e eficiência do novo Snapdragon."
 }
 ```
@@ -103,7 +102,7 @@ Content-Type: application/json
   "marca": "Motorola",
   "preco": 3000,
   "quantidade": 40,
-  "categoria": "TECNOLOGIA",
+  "categoria": "1",
    "descricao": "Primeiro moto g com ultrarrêsistencia, O poder da IA e a câmera Sony - LYTIA 600, 5 anos de atualização de Android, Som Dolby Atmos e tela Full HD+ de 6,8” com superbrilho e Smart Water Touch . Velocidade e eficiência do novo Snapdragon."
 
 

@@ -86,7 +86,7 @@ class ProdutoControllerTest {
                 .andExpect(jsonPath("$.marca").value("Motorola"))
                 .andExpect(jsonPath("$.preco").value("1600"))
                 .andExpect(jsonPath("$.quantidade").value("420"))
-                .andExpect(jsonPath("$.categoria").value("TECNOLOGIA"))
+                .andExpect(jsonPath("$.categoria.id").value("1"))
                 .andExpect(jsonPath("$.descricao").value("Primeiro moto g " +
                         "com ultrarresistência, O poder da IA e a câmera Sony - LYTIA 600, 5 anos de atualização de" +
                         " Android, Som Dolby Atmos e tela Full HD+ de 6,8” com superbrilho e Smart Water Touch ." +
@@ -112,7 +112,7 @@ class ProdutoControllerTest {
                 .andExpect(jsonPath("$[0].marca").value("Motorola"))
                 .andExpect(jsonPath("$[0].preco").value("1600.0"))
                 .andExpect(jsonPath("$[0].quantidade").value("420"))
-                .andExpect(jsonPath("$[0].categoria").value("TECNOLOGIA"))
+                .andExpect(jsonPath("$[0].categoria.id").value("1"))
                 .andExpect(jsonPath("$[0].descricao").value("Primeiro moto g com ultrarresistência, " +
                         "O poder da IA e a câmera Sony - LYTIA 600, 5 anos de atualização de Android, " +
                         "Som Dolby Atmos e tela Full HD+ de 6,8” com superbrilho e Smart Water Touch. " +
@@ -136,7 +136,7 @@ class ProdutoControllerTest {
                 .andExpect(jsonPath("$.marca").value("Motorola"))
                 .andExpect(jsonPath("$.preco").value("1600.0"))
                 .andExpect(jsonPath("$.quantidade").value("420"))
-                .andExpect(jsonPath("$.categoria").value("TECNOLOGIA"))
+                .andExpect(jsonPath("$.categoria.id").value("1"))
                 .andExpect(jsonPath("$.descricao").value("Primeiro moto g com ultrarresistência, " +
                         "O poder da IA e a câmera Sony - LYTIA 600, 5 anos de atualização de Android, " +
                         "Som Dolby Atmos e tela Full HD+ de 6,8” com superbrilho e Smart Water Touch. " +
@@ -163,7 +163,7 @@ class ProdutoControllerTest {
                 .andExpect(jsonPath("$.marca").value("Motorola"))
                 .andExpect(jsonPath("$.preco").value("2000"))
                 .andExpect(jsonPath("$.quantidade").value("320"))
-                .andExpect(jsonPath("$.categoria").value("TECNOLOGIA"))
+                .andExpect(jsonPath("$.categoria.id").value("1"))
                 .andExpect(jsonPath("$.descricao").value("Primeiro moto g " +
                         "com ultrarresistência, O poder da IA e a câmera Sony - LYTIA 600, 5 anos de atualização de" +
                         " Android, Som Dolby Atmos e tela Full HD+ de 6,8” com superbrilho e Smart Water Touch ." +
