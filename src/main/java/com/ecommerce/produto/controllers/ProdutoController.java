@@ -1,6 +1,8 @@
 package com.ecommerce.produto.controllers;
 
+import com.ecommerce.produto.dtos.CategoriaRecordDTO;
 import com.ecommerce.produto.dtos.ProdutoRecordDTO;
+import com.ecommerce.produto.models.Categoria;
 import com.ecommerce.produto.models.ProdutoModel;
 import com.ecommerce.produto.models.ProdutoModelElasticSearch;
 import com.ecommerce.produto.producers.RabbitMQProducer;
@@ -23,6 +25,13 @@ public class ProdutoController {
     public ProdutoController(ProdutoService produtoService, RabbitMQProducer rabbitMQProducer) {
         this.produtoService = produtoService;
         this.rabbitMQProducer = rabbitMQProducer;
+    }
+
+    @PostMapping("/categorias")
+    public ResponseEntity<Categoria> registrarCategoria(@RequestBody @Valid CategoriaRecordDTO categoriaDTO){
+        var novaCategoria = produtoService.registrarCategoria(categoriaDTO);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(novaCategoria);
     }
 
 
