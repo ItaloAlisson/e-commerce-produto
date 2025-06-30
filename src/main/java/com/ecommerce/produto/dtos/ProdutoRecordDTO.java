@@ -1,6 +1,6 @@
 package com.ecommerce.produto.dtos;
 
-import com.ecommerce.produto.enums.CategoriaEnum;
+import com.ecommerce.produto.models.Categoria;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
@@ -16,8 +16,7 @@ public record ProdutoRecordDTO(@NotBlank(message ="Campo 'nome' não pode estar 
                                BigDecimal preco,
                                @NotNull(message ="Campo 'quantidade' não pode ser nulo!")
                                Integer quantidade,
-                               @Enumerated(EnumType.STRING)
                                @NotNull(message ="Campo 'categoria' não pode ser nulo!")
-                               CategoriaEnum categoria,
+                               Categoria categoria,
                                String descricao) {
 }
